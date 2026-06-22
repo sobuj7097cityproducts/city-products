@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Details — City Group</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --card: #1e2333;
+    --border: #2a3045;
+    --accent: #4f8ef7;
+    --accent2: #a78bfa;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --text: #e8ecf4;
+    --muted: #7b869e;
+    --input-bg: #252c3f;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-logo {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .header-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .header-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .save-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 9px 22px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    font-family: 'Inter', sans-serif;
+  }
+  .save-btn:hover { background: #3a7de8; }
+  .save-btn:active { transform: scale(0.97); }
+
+  /* Main */
+  .main { padding: 36px 32px; max-width: 1100px; margin: 0 auto; }
+
+  .page-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .page-desc { color: var(--muted); font-size: 0.88rem; margin-bottom: 32px; }
+
+  /* Product Cards */
+  .products-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .product-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .product-card:hover { border-color: #3a4560; }
+
+  .card-header {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .product-badge {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    font-family: 'Space Grotesk', sans-serif;
+    flex-shrink: 0;
+  }
+  .badge-jelfy   { background: rgba(79,142,247,0.15); color: #4f8ef7; }
+  .badge-popup   { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .badge-kofitopi { background: rgba(52,211,153,0.15); color: #34d399; }
+  .badge-gum     { background: rgba(251,191,36,0.15); color: #fbbf24; }
+
+  .card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .card-id { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  /* Table inside card */
+  .card-body { padding: 20px 24px; }
+
+  .variants-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .variants-table thead th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 0 10px 10px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .variants-table thead th:first-child { padding-left: 0; }
+  .variants-table thead th.right { text-align: right; }
+
+  .variants-table tbody tr:not(:last-child) td { border-bottom: 1px solid var(--border); }
+
+  .variants-table tbody td {
+    padding: 10px 10px;
+    font-size: 0.88rem;
+    vertical-align: middle;
+  }
+  .variants-table tbody td:first-child { padding-left: 0; }
+
+  .row-num {
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    width: 28px;
+  }
+
+  .variant-name-input, .dim-input, .unit-select {
+    background: var(--input-bg);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    padding: 7px 10px;
+    transition: border-color 0.15s;
+    outline: none;
+    width: 100%;
+  }
+  .variant-name-input:focus, .dim-input:focus, .unit-select:focus {
+    border-color: var(--accent);
+    background: #2b3450;
+  }
+  .dim-input { width: 90px; text-align: center; }
+  .unit-select {
+    width: 72px;
+    padding: 7px 6px;
+    cursor: pointer;
+    appearance: none;
+    text-align: center;
+  }
+
+  .dim-cell { display: flex; align-items: center; gap: 6px; }
+  .dim-sep { color: var(--muted); font-size: 0.75rem; }
+
+  .delete-row-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px 6px;
+    border-radius: 5px;
+    transition: color 0.15s, background 0.15s;
+    line-height: 1;
+  }
+  .delete-row-btn:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+
+  /* Add row */
+  .add-row-btn {
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.82rem;
+    padding: 9px 16px;
+    margin-top: 12px;
+    width: 100%;
+    transition: color 0.15s, border-color 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .add-row-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    padding: 36px 0 24px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    background: var(--green);
+    color: #0f1117;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 12px 22px;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    z-index: 99;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    .main { padding: 20px 14px; }
+    .header { padding: 14px 16px; }
+    .card-body { padding: 14px 14px; }
+    .dim-input { width: 70px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">
+    <div class="header-logo">🍬</div>
+    <div>
+      <div class="header-title">City Group</div>
+      <div class="header-sub">Confectionary Division · Product Details</div>
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveAll()">💾 Save</button>
+</div>
+
+<div class="main">
+  <div class="page-heading">Product Details</div>
+  <div class="page-desc">Edit length, width and unit for each product variant. Changes save locally.</div>
+
+  <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<div class="footer">City Group Confectionary Division &nbsp;·&nbsp; Product Tracker</div>
+<div class="toast" id="toast">✓ Saved successfully</div>
+
+<script>
+const PRODUCTS = [
+  { id: 'jelfy',    name: 'Jelfy',    badgeClass: 'badge-jelfy',    short: 'JL' },
+  { id: 'popup',    name: 'Pop Up',   badgeClass: 'badge-popup',    short: 'PU' },
+  { id: 'kofitopi', name: 'Kofitopi', badgeClass: 'badge-kofitopi', short: 'KT' },
+  { id: 'gum',      name: 'GUM',      badgeClass: 'badge-gum',      short: 'GM' },
+];
+
+const UNITS = ['mm', 'cm', 'inch'];
+
+function loadData() {
+  try {
+    return JSON.parse(localStorage.getItem('cityProductData') || '{}');
+  } catch { return {}; }
+}
+
+function saveData(data) {
+  localStorage.setItem('cityProductData', JSON.stringify(data));
+}
+
+function defaultRows() {
+  return [
+    { name: '', length: '', width: '', unit: 'mm' }
+  ];
+}
+
+let data = loadData();
+
+PRODUCTS.forEach(p => {
+  if (!data[p.id]) data[p.id] = defaultRows();
+});
+
+function renderAll() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  PRODUCTS.forEach(p => renderCard(p, grid));
+}
+
+function renderCard(product, container) {
+  const rows = data[product.id];
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="product-badge ${product.badgeClass}">${product.short}</div>
+      <div>
+        <div class="card-title">${product.name}</div>
+        <div class="card-id">Product ID: ${product.id.toUpperCase()}</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <table class="variants-table">
+        <thead>
+          <tr>
+            <th style="width:30px">#</th>
+            <th>Variant Name</th>
+            <th>Length</th>
+            <th>Width</th>
+            <th>Unit</th>
+            <th class="right" style="width:36px"></th>
+          </tr>
+        </thead>
+        <tbody id="tbody-${product.id}"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addRow('${product.id}')">+ Add Variant</button>
+    </div>
+  `;
+  container.appendChild(card);
+  renderRows(product.id);
+}
+
+function renderRows(pid) {
+  const tbody = document.getElementById('tbody-' + pid);
+  tbody.innerHTML = '';
+  data[pid].forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="row-num">${i + 1}</td>
+      <td><input class="variant-name-input" placeholder="e.g. Regular, Large…" value="${esc(row.name)}" oninput="updateRow('${pid}',${i},'name',this.value)"></td>
+      <td><div class="dim-cell"><input class="dim-input" type="number" min="0" step="0.1" placeholder="0" value="${esc(row.length)}" oninput="updateRow('${pid}',${i},'length',this.value)"></div></td>
+      <td><div class="dim-cell"><input class="dim-input" type="number" min="0" step="0.1" placeholder="0" value="${esc(row.width)}" oninput="updateRow('${pid}',${i},'width',this.value)"></div></td>
+      <td>
+        <select class="unit-select" onchange="updateRow('${pid}',${i},'unit',this.value)">
+          ${UNITS.map(u => `<option value="${u}" ${row.unit===u?'selected':''}>${u}</option>`).join('')}
+        </select>
+      </td>
+      <td style="text-align:right"><button class="delete-row-btn" onclick="deleteRow('${pid}',${i})" title="Remove">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function esc(v) { return (v||'').toString().replace(/"/g,'&quot;'); }
+
+function updateRow(pid, i, field, val) {
+  data[pid][i][field] = val;
+}
+
+function addRow(pid) {
+  data[pid].push({ name: '', length: '', width: '', unit: 'mm' });
+  renderRows(pid);
+}
+
+function deleteRow(pid, i) {
+  if (data[pid].length <= 1) {
+    data[pid][0] = { name: '', length: '', width: '', unit: 'mm' };
+    renderRows(pid);
+    return;
+  }
+  data[pid].splice(i, 1);
+  renderRows(pid);
+}
+
+function saveAll() {
+  // Collect all current input values before saving
+  PRODUCTS.forEach(p => {
+    const rows = data[p.id];
+    rows.forEach((row, i) => {
+      const nameEl = document.querySelector(`#tbody-${p.id} tr:nth-child(${i+1}) .variant-name-input`);
+      const lenEl  = document.querySelectorAll(`#tbody-${p.id} tr:nth-child(${i+1}) .dim-input`)[0];
+      const widEl  = document.querySelectorAll(`#tbody-${p.id} tr:nth-child(${i+1}) .dim-input`)[1];
+      const unitEl = document.querySelector(`#tbody-${p.id} tr:nth-child(${i+1}) .unit-select`);
+      if (nameEl) row.name   = nameEl.value;
+      if (lenEl)  row.length = lenEl.value;
+      if (widEl)  row.width  = widEl.value;
+      if (unitEl) row.unit   = unitEl.value;
+    });
+  });
+  saveData(data);
+  showToast();
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+renderAll();
+</script>
+</body>
+</html>
